@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def email_slicer(email):
     """Extracts the username and domain from an email address."""
