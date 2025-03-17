@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Slicer</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 8px; width: 250px; margin-bottom: 10px; }
+        button { padding: 8px 12px; cursor: pointer; }
+        #result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Email Slicer</h2>
+    <p>Enter your email address to extract the username and domain:</p>
+    
+    <input type="text" id="emailInput" placeholder="Enter email..." />
+    <button onclick="sliceEmail()">Slice Email</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function sliceEmail() {
+            let email = document.getElementById("emailInput").value;
+            if (!email.includes("@")) {
+                document.getElementById("result").innerHTML = "❌ Please enter a valid email!";
+                return;
+            }
+
+            let response = await fetch("https://email-slicer.onrender.com/slice", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "email": email })
+            });
+
+            let data = await response.json();
+            if (data.error) {
+                document.getElementById("result").innerHTML = "❌ " + data.error;
+            } else {
+                document.getElementById("result").innerHTML = 
+                    `✅ Username: <b>${data.username}</b> <br> ✅ Domain: <b>${data.domain}</b>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
